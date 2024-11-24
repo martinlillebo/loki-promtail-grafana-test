@@ -5,6 +5,7 @@ networks:
 
 services:
   loki:
+    container_name: loki
     image: grafana/loki:2.9.2
     ports:
       - "3100:3100"
@@ -14,6 +15,7 @@ services:
     restart: unless-stopped
 
   promtail:
+    container_name: promtail
     image: grafana/promtail:2.9.2
     volumes:
       - /var/log:/var/log
@@ -25,6 +27,7 @@ services:
     restart: unless-stopped
 
   grafana:
+    container_name: grafana
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_AUTH_ANONYMOUS_ENABLED=true
@@ -54,3 +57,13 @@ services:
     networks:
       - loki
     restart: unless-stopped
+
+  helloworld-container:
+    container_name: hei
+    image: lillebomartin/hei-1:v1.0.0
+    networks:
+      - loki
+    logging:
+      driver: "loki"
+      options: 
+        loki-url: "http://localhost:3100/loki/api/v1/push"
