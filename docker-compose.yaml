@@ -65,5 +65,6 @@ services:
       - loki
     logging:
       driver: "loki"
-      options: 
+      options:
         loki-url: "http://localhost:3100/loki/api/v1/push"
+    restart: unless-stopped
